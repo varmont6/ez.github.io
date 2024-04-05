@@ -1,0 +1,6 @@
+Instalacja Apache, php i mysql
+0.	sprawdzam czy instalacyjną wersję xampp mamy
+1.	W przeglądarce 127.0.0.1
+-intertepreter języka php zawiera zbiór funkcji i modułów udostępnionych w lokalnym serwisie stron WWW
+-otwarty Server Apache dla http dostępny w Windows i Linux 
+-kompleksowy system zarządzania bazami danych Mostrl łatwość zarządzanie bazami w mysql zapewnia PHP Myadmin
