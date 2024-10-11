@@ -1,1 +1,108 @@
 Temat zrobić stronę intenetowa
+Oto pełny podpunkt wraz z przykładowym kodem w PHP dla podstrony "Wyniki", korzystającej z bazy danych MySQL:
+
+
+---
+
+Podstrona „Wyniki” zawiera prosty formularz logowania (pole tekstowe – login, pole tekstowe – hasło oraz przycisk – zaloguj). Po zalogowaniu (Login – kandydat1, hasło: student3) użytkownik zostaje przekierowany na stronę wyświetlającą listę kandydatów oraz ich punkty. Dane te pobierane są z bazy danych MySQL.
+
+
+Przykładowy kod:
+
+1. Formularz logowania:
+
+
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+</head>
+<body>
+    <h2>Logowanie</h2>
+    <form action="wyniki.php" method="post">
+        <label for="login">Login:</label>
+        <input type="text" id="login" name="login" required><br><br>
+        <label for="password">Hasło:</label>
+        <input type="password" id="password" name="password" required><br><br>
+        <input type="submit" value="Zaloguj">
+    </form>
+</body>
+</html>
+
+2. Obsługa logowania i wyświetlenie wyników (wyniki.php):
+
+
+
+<?php
+// Dane do logowania (dla uproszczenia w kodzie)
+$valid_login = 'kandydat1';
+$valid_password = 'student3';
+
+// Pobranie danych z formularza
+$login = $_POST['login'];
+$password = $_POST['password'];
+
+// Sprawdzenie poprawności danych logowania
+if ($login === $valid_login && $password === $valid_password) {
+    // Połączenie z bazą danych MySQL
+    $conn = new mysqli('localhost', 'root', '', 'rekrutacja');
+
+    // Sprawdzenie połączenia
+    if ($conn->connect_error) {
+        die('Błąd połączenia: ' . $conn->connect_error);
+    }
+
+    // Zapytanie do bazy o kandydatów
+    $sql = "SELECT imie, punkty FROM kandydaci";
+    $result = $conn->query($sql);
+
+    // Wyświetlenie wyników
+    if ($result->num_rows > 0) {
+        echo "<h2>Wyniki:</h2>";
+        echo "<table border='1'><tr><th>Kandydat</th><th>Punkty</th></tr>";
+
+        // Wyświetlenie każdego kandydata
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr><td>" . $row['imie'] . "</td><td>" . $row['punkty'] . "</td></tr>";
+        }
+
+        echo "</table>";
+    } else {
+        echo "Brak wyników.";
+    }
+
+    // Zamknięcie połączenia
+    $conn->close();
+} else {
+    echo "Niepoprawny login lub hasło.";
+}
+?>
+
+3. Struktura tabeli MySQL (kandydaci):
+
+
+
+CREATE DATABASE rekrutacja;
+
+USE rekrutacja;
+
+CREATE TABLE kandydaci (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    imie VARCHAR(50),
+    punkty INT
+);
+
+INSERT INTO kandydaci (imie, punkty) VALUES
+('Kandydat1', 12),
+('Kandydat2', 23),
+('Kandydat3', 20),
+('Kandydat4', 15),
+('Kandydat5', 21);
+
+
+---
+
+Dzięki temu rozwiązaniu użytkownik po poprawnym zalogowaniu może przeglądać listę kandydatów i ich punktację, pobieraną z bazy danych. Jeśli chciałbyś, żebym dodał coś więcej lub potrzebujesz dodatkowych elementów, daj znać!
+
